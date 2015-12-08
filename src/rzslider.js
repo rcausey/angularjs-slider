@@ -1,5 +1,5 @@
 'use strict';
-var module = angular.module('rzModule', [])
+angular.module('rzModule', [])
   .factory('RzSliderOptions', function() {
     var defaultOptions = {
       floor: 0,
