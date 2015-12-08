@@ -1,5 +1,5 @@
 'use strict';
-angular.module('rzModule', [])
+var module = angular.module('rzModule', [])
   .factory('RzSliderOptions', function() {
     var defaultOptions = {
       floor: 0,
@@ -1364,3 +1364,12 @@ angular.module('rzModule', [])
       }
     };
   });
+
+  module.run(['$templateCache', function($templateCache) {
+    'use strict';
+
+    $templateCache.put('rzSliderTpl.html',
+      "<span class=rz-bar-wrapper><span class=rz-bar></span></span> <span class=rz-bar-wrapper><span class=\"rz-bar rz-selection\"></span></span> <span class=rz-pointer></span> <span class=rz-pointer></span> <span class=\"rz-bubble rz-limit\"></span> <span class=\"rz-bubble rz-limit\"></span> <span class=rz-bubble></span> <span class=rz-bubble></span> <span class=rz-bubble></span><ul class=rz-ticks></ul>"
+    );
+
+  }]);
