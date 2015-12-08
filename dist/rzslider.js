@@ -1,35 +1,5 @@
-/**
- * Angular JS slider directive
- *
- * (c) Rafal Zajac <rzajac@gmail.com>
- * http://github.com/rzajac/angularjs-slider
- *
- * Version: v2.1.0
- *
- * Licensed under the MIT license
- */
-
-/*jslint unparam: true */
-/*global angular: false, console: false, define, module */
-(function(root, factory) {
   'use strict';
-  if (typeof define === 'function' && define.amd) {
-    // AMD. Register as an anonymous module.
-    define(['angular'], factory);
-  } else if (typeof module === 'object' && module.exports) {
-    // Node. Does not work with strict CommonJS, but
-    // only CommonJS-like environments that support module.exports,
-    // like Node.
-    // to support bundler like browserify
-    module.exports = factory(require('angular'));
-  } else {
-    // Browser globals (root is window)
-    factory(root.angular);
-  }
-
-}(this, function(angular) {
-  'use strict';
-  var module = angular.module('rzModule', [])
+  angular.module('rzModule', [])
 
   .factory('RzSliderOptions', function() {
     var defaultOptions = {
@@ -1395,48 +1365,3 @@
       }
     };
   }]);
-
-  // IDE assist
-
-  /**
-   * @name ngScope
-   *
-   * @property {number} rzSliderModel
-   * @property {number} rzSliderHigh
-   * @property {Object} rzSliderOptions
-   */
-
-  /**
-   * @name jqLite
-   *
-   * @property {number|undefined} rzsp rzslider label position offset
-   * @property {number|undefined} rzsd rzslider element dimension
-   * @property {string|undefined} rzsv rzslider label value/text
-   * @property {Function} css
-   * @property {Function} text
-   */
-
-  /**
-   * @name Event
-   * @property {Array} touches
-   * @property {Event} originalEvent
-   */
-
-  /**
-   * @name ThrottleOptions
-   *
-   * @property {boolean} leading
-   * @property {boolean} trailing
-   */
-
-  module.run(['$templateCache', function($templateCache) {
-  'use strict';
-
-  $templateCache.put('rzSliderTpl.html',
-    "<span class=rz-bar-wrapper><span class=rz-bar></span></span> <span class=rz-bar-wrapper><span class=\"rz-bar rz-selection\"></span></span> <span class=rz-pointer></span> <span class=rz-pointer></span> <span class=\"rz-bubble rz-limit\"></span> <span class=\"rz-bubble rz-limit\"></span> <span class=rz-bubble></span> <span class=rz-bubble></span> <span class=rz-bubble></span><ul class=rz-ticks></ul>"
-  );
-
-}]);
-
-  return module
-}));
