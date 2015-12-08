@@ -1,36 +1,5 @@
-/**
- * Angular JS slider directive
- *
- * (c) Rafal Zajac <rzajac@gmail.com>
- * http://github.com/rzajac/angularjs-slider
- *
- * Version: v2.1.0
- *
- * Licensed under the MIT license
- */
-
-/*jslint unparam: true */
-/*global angular: false, console: false, define, module */
-(function(root, factory) {
-  'use strict';
-  if (typeof define === 'function' && define.amd) {
-    // AMD. Register as an anonymous module.
-    define(['angular'], factory);
-  } else if (typeof module === 'object' && module.exports) {
-    // Node. Does not work with strict CommonJS, but
-    // only CommonJS-like environments that support module.exports,
-    // like Node.
-    // to support bundler like browserify
-    module.exports = factory(require('angular'));
-  } else {
-    // Browser globals (root is window)
-    factory(root.angular);
-  }
-
-}(this, function(angular) {
-  'use strict';
-  var module = angular.module('rzModule', [])
-
+'use strict';
+var module = angular.module('rzModule', [])
   .factory('RzSliderOptions', function() {
     var defaultOptions = {
       floor: 0,
@@ -1395,41 +1364,3 @@
       }
     };
   });
-
-  // IDE assist
-
-  /**
-   * @name ngScope
-   *
-   * @property {number} rzSliderModel
-   * @property {number} rzSliderHigh
-   * @property {Object} rzSliderOptions
-   */
-
-  /**
-   * @name jqLite
-   *
-   * @property {number|undefined} rzsp rzslider label position offset
-   * @property {number|undefined} rzsd rzslider element dimension
-   * @property {string|undefined} rzsv rzslider label value/text
-   * @property {Function} css
-   * @property {Function} text
-   */
-
-  /**
-   * @name Event
-   * @property {Array} touches
-   * @property {Event} originalEvent
-   */
-
-  /**
-   * @name ThrottleOptions
-   *
-   * @property {boolean} leading
-   * @property {boolean} trailing
-   */
-
-  /*templateReplacement*/
-
-  return module
-}));
