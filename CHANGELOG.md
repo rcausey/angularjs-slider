@@ -1,3 +1,79 @@
+# 2.10.2 (2016-03-01)
+## Bug fixes
+- Remove the dist folder from gitignore.
+
+# 2.10.1 (2016-03-01)
+## Bug fixes
+- Republish the npm module since dist files were missing.
+
+# 2.10.0 (2016-02-29)
+## Features
+- Added `rightToLeft` option for RTL support (#270). Thanks @Liam-Ryan :).
+
+# 2.9.0 (2016-02-18)
+## Features
+- Change `rzSliderOptions` to use expression binding (#266).
+
+# 2.8.0 (2016-02-08)
+## Features
+- Add a `getPointerColor` option to dynamically change the pointers color (#253).
+
+# 2.7.1 (2016-02-06)
+## Fix
+- Fix high label positioning when size is different than the ceil one.
+
+# 2.7.0 (2016-02-06)
+## Features
+- Add an `enforceStep` option (defaults to true) (#246).
+- Add a `showSelectionBarFromValue` options (#250).
+- Use jqLite html() method to display label values so the translate function can return formated content (#251).
+- Pass a label string as third arg to the `translate` function to differentiate the labels (#252).
+
+## Fix
+- Improve combined label position and show only one value if min==max (#245).
+
+# 2.6.0 (2016-01-31)
+## Features
+- Add a `noSwitching` option to prevent the user from switching the min and max handles (#233).
+
+## Bug fixes
+- Refactor the internal `roundStep` function that was too strict (5d130f09d).
+
+# 2.5.0 (2016-01-24)
+## Features
+- Add a `minRange` option to set a minimal range (#231).
+- Pass the slider values to the `onStart`, `onChange` and `onEnd` callbacks.
+- Rollback and improve the callback changes brought with 2.4.1 that were no applying the last update to the scope anymore.
+
+# 2.4.1 (2016-01-15)
+## Performance improvements
+- Remove the $timeout call in the init method (#223).
+- Remove the $timeout call in the onStart callback.
+- Remove the $timeout call in the onChange callback (#229).
+
+# 2.4.0 (2015-12-30)
+## Features
+- Add an `enforceRange` options to round the `rzSliderModel` and `rzSliderHigh` to the slider range even when modified from outside the slider.(#208).
+- Add a `ticksTooltip` option used to display a tooltip when a tick is hovered (#209).
+- Add an `onlyBindHandles` option to only bind events on slider handles (#212).
+- Add a `showSelectionBarEnd` option to display the selection bar after the value (#214).
+
+## Bug fixes
+- Fix reset of maxH element (#204).
+- Change the watchers order to prevent unwanted model modifications (#207).
+
+# 2.3.0 (2015-12-22)
+## Features
+- Add keyboard support (activated by default with `keyboardSupport` set to true) (#191).
+- Add a `draggableRangeOnly` options (#203).
+
+# 2.2.0 (2015-12-17)
+## Features
+- Add a `getSelectionBarColor` option to dynamically change the selection bar color (#197).
+
+## Bug fixes
+- Fix negative float values rendering (#190).
+
 # 2.1.0 (2015-11-29)
 ## Features
 - Add a `vertical` options to display vertical sliders (#185).

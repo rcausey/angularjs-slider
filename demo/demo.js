@@ -6,6 +6,41 @@ app.controller('MainCtrl', function($scope, $rootScope, $timeout, $modal) {
     value: 10
   };
 
+  //Range slider config
+  $scope.rangeSlider = {
+    minValue: 10,
+    maxValue: 90,
+    options: {
+      floor: 0,
+      ceil: 100,
+      step: 1
+    }
+  };
+
+  //Range slider with minRange config
+  $scope.minRangeSlider = {
+    minValue: 10,
+    maxValue: 90,
+    options: {
+      floor: 0,
+      ceil: 100,
+      step: 1,
+      minRange: 10
+    }
+  };
+
+  //Range slider with noSwitching config
+  $scope.noSwitchingSlider = {
+    minValue: 10,
+    maxValue: 90,
+    options: {
+      floor: 0,
+      ceil: 100,
+      step: 1,
+      noSwitching: true
+    }
+  };
+
   //Slider with selection bar
   $scope.slider_visible_bar = {
     value: 10,
@@ -14,14 +49,56 @@ app.controller('MainCtrl', function($scope, $rootScope, $timeout, $modal) {
     }
   };
 
-  //Range slider config
-  $scope.minRangeSlider = {
-    minValue: 10,
-    maxValue: 90,
+  //Slider with selection bar end
+  $scope.slider_visible_bar_end = {
+    value: 10,
     options: {
-      floor: 0,
       ceil: 100,
-      step: 1
+      showSelectionBarEnd: true
+    }
+  };
+
+  //Slider with selection bar from value
+  $scope.slider_visible_bar_from_value = {
+    value: 10,
+    options: {
+      floor: -100,
+      ceil: 100,
+      step: 10,
+      showSelectionBarFromValue: 0
+    }
+  };
+
+  //Slider with selection bar color
+  $scope.color_slider_bar = {
+    value: 12,
+    options: {
+      showSelectionBar: true,
+      getSelectionBarColor: function(value) {
+        if (value <= 3)
+          return 'red';
+        if (value <= 6)
+          return 'orange';
+        if (value <= 9)
+          return 'yellow';
+        return '#2AE02A';
+      }
+    }
+  };
+
+  //Slider with pointer color
+  $scope.color_slider_pointer = {
+    value: 12,
+    options: {
+      getPointerColor: function(value) {
+        if (value <= 3)
+          return 'red';
+        if (value <= 6)
+          return 'orange';
+        if (value <= 9)
+          return 'yellow';
+        return '#2AE02A';
+      }
     }
   };
 
@@ -35,18 +112,32 @@ app.controller('MainCtrl', function($scope, $rootScope, $timeout, $modal) {
     }
   };
 
+  //Right to left slider with floor, ceil and step
+  $scope.slider_floor_ceil_rtl = {
+    value: 12,
+    options: {
+    floor: 10,
+    ceil: 100,
+    step: 5,
+    rightToLeft: true
+    }
+  }
+
   //Slider config with callbacks
   $scope.slider_callbacks = {
     value: 100,
     options: {
-      onStart: function() {
-        $scope.otherData.start = $scope.slider_callbacks.value * 10;
+      onStart: function(id, newValue) {
+        console.info('start', id, newValue);
+        $scope.otherData.start = newValue * 10;
       },
-      onChange: function() {
-        $scope.otherData.change = $scope.slider_callbacks.value * 10;
+      onChange: function(id, newValue) {
+        console.info('change', id, newValue);
+        $scope.otherData.change = newValue * 10;
       },
-      onEnd: function() {
-        $scope.otherData.end = $scope.slider_callbacks.value * 10;
+      onEnd: function(id, newValue) {
+        console.info('end', id, newValue);
+        $scope.otherData.end = newValue * 10;
       }
     }
   };
@@ -63,8 +154,30 @@ app.controller('MainCtrl', function($scope, $rootScope, $timeout, $modal) {
     options: {
       ceil: 500,
       floor: 0,
-      translate: function(value) {
+      id: 'translate-slider',
+      translate: function(value, id, which) {
+        console.info(value, id, which);
         return '$' + value;
+      }
+    }
+  };
+
+  //Slider config with custom display function using html formatting
+  $scope.slider_translate_html = {
+    minValue: 100,
+    maxValue: 400,
+    options: {
+      floor: 0,
+      ceil: 500,
+      translate: function(value, sliderId, label) {
+        switch (label) {
+          case 'model':
+            return '<b>Min price:</b> $' + value;
+          case 'high':
+            return '<b>Max price:</b> $' + value;
+          default:
+            return '$' + value
+        }
       }
     }
   };
@@ -84,6 +197,19 @@ app.controller('MainCtrl', function($scope, $rootScope, $timeout, $modal) {
       ceil: 10,
       floor: 0,
       showTicks: true
+    }
+  };
+
+  //Slider with ticks and tooltip
+  $scope.slider_ticks_tooltip = {
+    value: 5,
+    options: {
+      ceil: 10,
+      floor: 0,
+      showTicks: true,
+      ticksTooltip: function(v) {
+        return 'Tooltip for ' + v;
+      }
     }
   };
 
@@ -119,6 +245,17 @@ app.controller('MainCtrl', function($scope, $rootScope, $timeout, $modal) {
       ceil: 10,
       floor: 0,
       draggableRange: true
+    }
+  };
+
+  //Slider with draggable range only
+  $scope.slider_draggable_range_only = {
+    minValue: 4,
+    maxValue: 6,
+    options: {
+      ceil: 10,
+      floor: 0,
+      draggableRangeOnly: true
     }
   };
 

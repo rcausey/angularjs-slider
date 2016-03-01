@@ -3,18 +3,24 @@
 Status:
 [![npm version](https://img.shields.io/npm/v/angularjs-slider.svg?style=flat-square)](https://www.npmjs.com/package/angularjs-slider)
 [![npm downloads](https://img.shields.io/npm/dm/angularjs-slider.svg?style=flat-square)](http://npm-stat.com/charts.html?package=angularjs-slider&from=2015-01-01)
+[![Build Status](https://img.shields.io/travis/angular-slider/angularjs-slider.svg?style=flat-square)](https://travis-ci.org/angular-slider/angularjs-slider)
+[![codecov.io](https://img.shields.io/codecov/c/github/angular-slider/angularjs-slider.svg?style=flat-square)](https://codecov.io/github/angular-slider/angularjs-slider?branch=master)
+![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)
 
 Links:
-[![Join the chat at https://gitter.im/rzajac/angularjs-slider](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/rzajac/angularjs-slider?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://gitter.im/rzajac/angularjs-slider](https://img.shields.io/badge/GITTER-join%20chat-1dce73.svg?style=flat-square)](https://gitter.im/rzajac/angularjs-slider?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-Slider directive implementation for AngularJS, without any dependencies: [http://rzajac.github.io/angularjs-slider](http://rzajac.github.io/angularjs-slider/index.html).
+Slider directive implementation for AngularJS, without any dependencies: [http://angular-slider.github.io/angularjs-slider](http://angular-slider.github.io/angularjs-slider/index.html).
 
 - Mobile friendly
 - Fast
 - Well documented
 - Customizable
 - Simple to use
+- Keyboard support
 - Compatibility with jQuery Lite, ie. with full jQuery ( Thanks Jusas! https://github.com/Jusas)
+- Supports right to left
 
 **Horizontal**
 
@@ -26,15 +32,15 @@ Slider directive implementation for AngularJS, without any dependencies: [http:/
 
 ## Examples
 
-- **Various examples:** [http://rzajac.github.io/angularjs-slider](http://rzajac.github.io/angularjs-slider/index.html)
-- **Same examples with code:** https://jsfiddle.net/juhbf3dz/
+- **Various examples:** [http://angular-slider.github.io/angularjs-slider](http://angular-slider.github.io/angularjs-slider/index.html)
+- **Same examples with live code:** https://jsfiddle.net/ValentinH/954eve2L/
 
 ## Reporting issues
 Make sure the report is accompanied by a reproducible demo. The ideal demo is created by forking [our standard jsFiddle](http://jsfiddle.net/cwhgLcjv/), adding your own code and stripping it down to an absolute minimum needed to demonstrate the bug.
 
 ## Common issues
 ### My slider is not rendered correctly on load
-If the slider's parent element is not visible during slider initialization, the slider can't know when its parent becomes visible. 
+If the slider's parent element is not visible during slider initialization, the slider can't know when its parent becomes visible.
 For instance, when displaying a slider inside an element which visibility is toggled using ng-show, you need to send an event to force it to redraw when you set your ng-show to true.
 
 Here's an example of `refreshSlider` method that you should call whenever the slider becomes visible.
@@ -60,6 +66,22 @@ or
 ### Bower
 ```
 $ bower install --save angularjs-slider
+```
+
+or
+### CDNJS
+Directly use (replace `X.X.X` by the version you want to use):
+- `https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/X.X.X/rzslider.min.js`
+- `https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/X.X.X/rzslider.min.css`
+
+
+## Project integration
+
+### Imports
+```html
+<link rel="stylesheet" type="text/css" href="/path/to/slider/rzslider.css"/>
+<script src="/path/to/angularjs/angular.min.js"></script>
+<script src="/path/to/slider/rzslider.min.js"></script>
 ```
 
 ### Module
@@ -153,22 +175,36 @@ The default options are:
     ceil: null, //defaults to rz-slider-model
     step: 1,
     precision: 0,
-    translate: null,
+    minRange: 0,
     id: null,
+    translate: null,
     stepsArray: null,
     draggableRange: false,
+    draggableRangeOnly: false,
     showSelectionBar: false,
+    showSelectionBarEnd: false,
+    showSelectionBarFromValue: null,
     hideLimitLabels: false,
     readOnly: false,
     disabled: false,
     interval: 350,
     showTicks: false,
     showTicksValues: false,
+    ticksTooltip: null,
+    ticksValuesTooltip: null,
     vertical: false,
+    getSelectionBarColor: null,
+    getPointerColor: null,
+    keyboardSupport: true,
     scale: 1,
+    enforceStep: true,
+    enforceRange: false,
+    noSwitching: false,
+    onlyBindHandles: false,
     onStart: null,
     onChange: null,
-    onEnd: null
+    onEnd: null,
+    rightToLeft: false
 }
 ````
 
@@ -180,7 +216,17 @@ The default options are:
 
 **precision** - _Number (defaults to 0)_: The precision to display values with. The `toFixed()` is used internally for this.
 
-**translate** - _Function(value, sliderId)_: Custom translate function. Use this if you want to translate values displayed on the slider. For example if you want to display dollar amounts instead of just numbers:
+**minRange** - _Number (defaults to 0)_: The minimum range authorized on the slider. *Applies to range slider only.*
+
+**translate** - _Function(value, sliderId, label)_: Custom translate function. Use this if you want to translate values displayed on the slider.
+`sliderId` can be used to determine the slider for which we are translating the value. `label` is a string that can take the following values:
+  - *'model'*: the model label
+  - *'high'*: the high label
+  - *'floor'*: the floor label
+  - *'ceil'*: the ceil label
+  - *'tick-value'*: the ticks labels
+
+For example if you want to display dollar amounts instead of just numbers:
 ```html
 <div>
     <rzslider
@@ -205,9 +251,19 @@ $scope.slider = {
 
 **stepsArray** - _Array_: If you want to display a slider with non linear/number steps. Just pass an array with each slider value and that's it; the floor, ceil and step settings of the slider will be computed automatically. The `rz-slider-model` value will be the index of the selected item in the stepsArray.
 
-**draggableRange** - _Boolean (defaults to false)_: When set to true and using a range slider, the range can be dragged by the selection bar. _This doesn't work when ticks are shown._
+**draggableRange** - _Boolean (defaults to false)_: When set to true and using a range slider, the range can be dragged by the selection bar. *Applies to range slider only.*
 
-**showSelectionBar** - _Boolean (defaults to false)_: Set to true to always show the selection bar.
+**draggableRangeOnly** - _Boolean (defaults to false)_: Same as draggableRange but the slider range can't be changed. *Applies to range slider only.*
+
+**showSelectionBar** - _Boolean (defaults to false)_: Set to true to always show the selection bar before the slider handle.
+
+**showSelectionBarEnd** - _Boolean (defaults to false)_: Set to true to always show the selection bar after the slider handle.
+
+**showSelectionBarFromValue** - _Number (defaults to null)_: Set a number to draw the selection bar between this value and the slider handle.
+
+**getSelectionBarColor** - _Function(value) or Function(minVal, maxVal) (defaults to null)_: Function that returns the current color of the selection bar. If the returned color depends on a model value (either `rzScopeModel`or `'rzSliderHigh`), you should use the argument passed to the function. Indeed, when the function is called, there is no certainty that the model has already been updated.
+
+**getPointerColor** - _Function(value, pointerType) (defaults to null)_: Function that returns the current color of a pointer. If the returned color depends on a model value (either `rzScopeModel`or `'rzSliderHigh`), you should use the argument passed to the function. Indeed, when the function is called, there is no certainty that the model has already been updated. To handle range slider pointers independently, you should evaluate pointerType within the given function where "min" stands for `rzScopeModel` and "max" for `rzScopeHigh` values.
 
 **hideLimitLabels** - _Boolean (defaults to false)_: Set to true to hide min / max labels
 
@@ -221,18 +277,38 @@ $scope.slider = {
 
 **showTicksValues** - _Boolean (defaults to false)_: Set to true to display a tick and  the step value for each step of the slider.
 
-**ticksValuesTooltip** - _Function(value) (defaults to null)_: (requires angular-ui bootstrap) Used to display a tooltip when a tick value is hovered. Set to a function that returns the tooltip content for a given value.
+**ticksTooltip** - _Function(value) (defaults to null)_: (requires angular-ui bootstrap) Used to display a tooltip when a tick is hovered. Set to a function that returns the tooltip content for a given value.
+
+**ticksValuesTooltip** - _Function(value) (defaults to null)_: Same as `ticksTooltip` but for ticks values.
 
 **scale** - _Number (defaults to 1)_: If you display the slider in an element that uses `transform: scale(0.5)`, set the `scale` value to 2 so that the slider is rendered properly and the events are handled correctly.
 
-**onStart** - _Function(sliderId)_: Function to be called when a slider update is started. If an id was set in the options, then it's passed to this callback.
+**enforceStep** - _Boolean (defaults to true)_: Set to true to force the value to be rounded to the step, even when modified from the outside.. When set to false, if the model values are modified from outside the slider, they are not rounded and can be between two steps.
 
-**onChange** - _Function(sliderId)_: Function to be called when rz-slider-model or rz-slider-high change. If an id was set in the options, then it's passed to this callback.
+**enforceRange** - _Boolean (defaults to false)_: Set to true to round the `rzSliderModel` and `rzSliderHigh` to the slider range even when modified from outside the slider. When set to false, if the model values are modified from outside the slider, they are not rounded but they are still rendered properly on the slider.
 
-**onEnd** - _Function(sliderId)_: Function to be called when a slider update is ended. If an id was set in the options, then it's passed to this callback.
+**noSwitching** - _Boolean (defaults to false)_: Set to true to prevent to user from switching the min and max handles. *Applies to range slider only.*
+
+**onlyBindHandles** - _Boolean (defaults to false)_: Set to true to only bind events on slider handles.
+
+**onStart** - _Function(sliderId, modelValue, highValue)_: Function to be called when a slider update is started. If an id was set in the options, then it's passed to this callback. This callback is called before any update on the model.
+
+**onChange** - _Function(sliderId, modelValue, highValue)_: Function to be called when rz-slider-model or rz-slider-high change. If an id was set in the options, then it's passed to this callback.
+
+**onEnd** - _Function(sliderId, modelValue, highValue)_: Function to be called when a slider update is ended. If an id was set in the options, then it's passed to this callback.
+
+**rightToLeft** - _Boolean (defaults to false)_: Set to true to show graphs right to left. If **vertical** is true it will be from top to bottom and left / right arrow functions reversed.
 
 **vertical** - _Boolean (defaults to false)_: Set to true to display the slider vertically. The slider will take the full height of its parent.
 _Changing this value at runtime is not currently supported._
+
+**keyboardSupport** - _Boolean (defaults to true)_: Handles are focusable (on click or with tab) and can be modified using the following keyboard controls:
+  - Left/bottom arrows: -1
+  - Right/top arrows: +1
+  - Page-down: -10%
+  - Page-up: +10%
+  - Home: minimum value
+  - End: maximum value
 
 ## Change default options
 If you want the change the default options for all the sliders displayed in your application, you can set them using the `RzSliderOptions.options()` method:
@@ -246,7 +322,7 @@ angular.module('App', ['rzModule'])
 
 ## Slider events
 
-To force slider to recalculate dimensions, broadcast **reCalcViewDimensions** event from parent scope. This is useful for example when you use slider inside a widget where the content is hidden at start - see the "Sliders into modal" example [on the demo site](http://rzajac.github.io/angularjs-slider/).
+To force slider to recalculate dimensions, broadcast **reCalcViewDimensions** event from parent scope. This is useful for example when you use slider inside a widget where the content is hidden at start - see the "Sliders into modal" example [on the demo site](http://angular-slider.github.io/angularjs-slider).
 
 You can also force redraw with **rzSliderForceRender** event.
 
@@ -256,18 +332,6 @@ At the end of each "slide" slider emits `slideEnded` event.
 $scope.$on("slideEnded", function() {
      // user finished sliding a handle
 });
-```
-
-## Project integration
-
-```html
-    <link rel="stylesheet" type="text/css" href="/path/to/slider/rzslider.css"/>
-    <script src="/path/to/angularjs/angular.min.js"></script>
-    <script src="/path/to/slider/rzslider.min.js"></script>
-
-    <script>
-        var YourApp = angular.module('myapp', ['rzModule']);
-    </script>
 ```
 
 ## Browser support
