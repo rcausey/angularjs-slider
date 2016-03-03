@@ -1215,7 +1215,7 @@
         /* http://stackoverflow.com/a/12336075/282882 */
         //noinspection JSLint
         var clientXY = this.options.vertical ? 'clientY' : 'clientX';
-        if (clientXY in event) {
+        if (clientXY in event && event[clientXY] !== undefined) {
           return event[clientXY];
         }
 
