@@ -1,34 +1,5 @@
-/**
- * Angular JS slider directive
- *
- * (c) Rafal Zajac <rzajac@gmail.com>
- * http://github.com/rzajac/angularjs-slider
- *
- * Licensed under the MIT license
- */
-/*jslint unparam: true */
-/*global angular: false, console: false, define, module */
-(function(root, factory) {
-  'use strict';
-  /* istanbul ignore next */
-  if (typeof define === 'function' && define.amd) {
-    // AMD. Register as an anonymous module.
-    define(['angular'], factory);
-  } else if (typeof module === 'object' && module.exports) {
-    // Node. Does not work with strict CommonJS, but
-    // only CommonJS-like environments that support module.exports,
-    // like Node.
-    // to support bundler like browserify
-    module.exports = factory(require('angular'));
-  } else {
-    // Browser globals (root is window)
-    factory(root.angular);
-  }
-
-}(this, function(angular) {
-  'use strict';
-  var module = angular.module('rzModule', [])
-
+'use strict';
+var module = angular.module('rzModule', [])
   .factory('RzSliderOptions', function() {
     var defaultOptions = {
       floor: 0,
@@ -1846,40 +1817,10 @@
     };
   });
 
-  // IDE assist
+module.run(['$templateCache', function($templateCache) {
+  'use strict';
 
-  /**
-   * @name ngScope
-   *
-   * @property {number} rzSliderModel
-   * @property {number} rzSliderHigh
-   * @property {Object} rzSliderOptions
-   */
-
-  /**
-   * @name jqLite
-   *
-   * @property {number|undefined} rzsp rzslider label position offset
-   * @property {number|undefined} rzsd rzslider element dimension
-   * @property {string|undefined} rzsv rzslider label value/text
-   * @property {Function} css
-   * @property {Function} text
-   */
-
-  /**
-   * @name Event
-   * @property {Array} touches
-   * @property {Event} originalEvent
-   */
-
-  /**
-   * @name ThrottleOptions
-   *
-   * @property {boolean} leading
-   * @property {boolean} trailing
-   */
-
-  /*templateReplacement*/
-
-  return module
-}));
+  $templateCache.put('rzSliderTpl.html',
+    '<span class="rz-bar-wrapper"><span class="rz-bar"></span></span><span class="rz-bar-wrapper"><span class="rz-bar rz-selection" ng-style="barStyle"></span></span><span class="rz-pointer rz-pointer-min" ng-style=minPointerStyle></span><span class="rz-pointer rz-pointer-max" ng-style=maxPointerStyle></span><span class="rz-bubble rz-limit"></span><span class="rz-bubble rz-limit"></span><span class="rz-bubble"></span><span class="rz-bubble"></span><span class="rz-bubble"></span><ul ng-show="showTicks" class="rz-ticks"><li ng-repeat="t in ticks track by $index" class="tick" ng-class="{selected: t.selected}" ng-style="t.style" ng-attr-uib-tooltip="{{ t.tooltip }}" ng-attr-tooltip-placement="{{t.tooltipPlacement}}" ng-attr-tooltip-append-to-body="{{ t.tooltip ? true : undefined}}"><span ng-if="t.value != null" class="tick-value" ng-attr-uib-tooltip="{{ t.valueTooltip }}" ng-attr-tooltip-placement="{{t.valueTooltipPlacement}}">{{ t.value }}</span></li></ul>'
+  );
+}]);
